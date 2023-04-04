@@ -27,22 +27,21 @@ const showComment = (inputId1, inputId2) => {
   cataName.innerText = inputId2;
   loadCatagoriId(inputId1);
 }
-
 const loadCatagoriId = async (category_id) => {
+  
   const url = `https://openapi.programming-hero.com/api/news/category/0${category_id}`;
   const res = await fetch(url);
   const data = await res.json();
   newsPortal(data.data);
 }
 const newsPortal = data => {
-  // console.log(data);
   const count = document.getElementById('count');
   count.innerText = data.length + ` items found for catagory`;
   const newsPortal = document.getElementById('newsPortal');
   newsPortal.innerHTML = ``;
   data.forEach(it => {
     const div = document.createElement('div');
-    const { title, image_url, details, _id } = it;
+    const { title, image_url, details, _id, total_view } = it;
     div.innerHTML = `
      <div class="lg:flex py-4 my-10 bg-white border rounded-lg  container mx-auto justify-between">
             <img class="mb-6 mx-auto md:px-3 sm:my-auto lg:mx-6 w-[11rem] sm:w-[18rem] rounded-lg  md:h-[300px] md:w-[440px] sm:items-center" src="${image_url}" alt="" >
@@ -54,16 +53,16 @@ const newsPortal = data => {
                     <div class="flex items-center">
                         <div><img class="w-5 rounded-lg" src="${it.author.img}" alt=""></div>
                         <div class="md:px-4 px-1">
-                            <p class="text-[#2B2C34] text-xs">Name : <span class="font-semibold">${it.author.name}</span></p>
+                            <p class="text-[#2B2C34] text-xs">Name : <span class="font-semibold">${it.author.name ? it.author.name:" "}</span></p>
                             <p class="text-[#718797] text-xs">Date : ${it.author.published_date}</p>
                         </div>
         
                     </div>
-                    <div class="flex items-center md:text-xl text-xs sm:text-sm">
+                    <div class="flex items-center lg:text-xl text-xs sm:text-sm">
                         <i class="fa-solid fa-eye md:px-2"></i>
-                        <p class="text-[#515151]">1.5M</p>
+                        <p class="text-[#515151]">${total_view ? total_view:'0'}</p>
                     </div>
-                    <div class="md:text-xl text-xs sm:text-sm">
+                    <div class="lg:text-sm text-xs sm:text-sm">
                         <i class="fa-regular fa-star-half-stroke"></i>
                         <i class="fa-regular fa-star"></i>
                         <i class="fa-regular fa-star"></i>
@@ -94,10 +93,11 @@ const loadNews = async (news_id) => {
   showExtra(data.data[0]);
 }
 
+
 const showExtra = data => {
-  console.log(data);
+
   const { title, details, image_url } = data;
-  console.log(title);
+  
   // const modal = document.getElementById('newsModal');
   // modal.innerHTML = `
   // `
